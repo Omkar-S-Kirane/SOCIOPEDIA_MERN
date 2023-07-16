@@ -9,6 +9,10 @@ import morgan from "morgan"; // HTTP request logger
 import path from "path"; // File path manipulation
 import cors from "cors"; // Enable Cross-Origin Resource Sharing (CORS)
 
+// Local File Imports
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
+
 /* ****************** CONFIGURATION ****************** */
 // Get the current file path and filename
 const __filename = fileURLToPath(import.meta.url);
@@ -58,6 +62,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+/* ****************** ROUTES WITH FILES ****************** */
+app.post("/auth/register", upload.single("picture"), register);
+
+/* ****************** ROUTES ****************** */
+app.use("/auth", authRoutes);
+
 /* ****************** MONGOOSE SETUP ****************** */
 const PORT = process.env.PORT || 6001;
 
@@ -72,4 +82,3 @@ mongoose
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
   .catch((error) => console.log(`${error} did not connect`));
-
