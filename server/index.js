@@ -28,9 +28,7 @@ app.use(express.json());
 app.use(helmet());
 
 // Set Cross-Origin Resource Policy to "cross-origin"
-app.use(
-  helmet.crossOriginResourcePolicy({ policy: "cross-origin" })
-);
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // Log HTTP requests
 app.use(morgan("common"));
@@ -46,3 +44,32 @@ app.use(cors());
 
 // Serve static files from the "public/assets" directory under the "/assets" route
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+
+/* ****************** FILE STORAGE ****************** */
+const storage = multer.diskStorage({
+  // Specify the destination directory where uploaded files will be stored
+  destination: function (req, file, cb) {
+    cb(null, "public/assets");
+  },
+  // Specify the filename for the uploaded file
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage });
+
+/* ****************** MONGOOSE SETUP ****************** */
+const PORT = process.env.PORT || 6001;
+
+// Connect to MongoDB using the MONGO_URL environment variable
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true, // Use the new URL parser
+    useUnifiedTopology: true, // Use the new Server Discovery and Monitoring engine
+  })
+  .then(() => {
+    // Start the server and listen on the specified port
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+  })
+  .catch((error) => console.log(`${error} did not connect`));
+
