@@ -13,9 +13,12 @@ import cors from "cors"; // Enable Cross-Origin Resource Sharing (CORS)
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import { register } from "./controllers/auth.js";
+import { users, posts } from "./data/index.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import authRoutes from "./routes/auth.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
 
 /* ****************** CONFIGURATION ****************** */
 // Get the current file path and filename
@@ -87,5 +90,9 @@ mongoose
   .then(() => {
     // Start the server and listen on the specified port
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+    
+    // temporary add dummy data
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} did not connect`));
