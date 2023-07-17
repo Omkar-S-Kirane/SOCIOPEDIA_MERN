@@ -12,6 +12,7 @@ import cors from "cors"; // Enable Cross-Origin Resource Sharing (CORS)
 // Local File Imports
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
 
 /* ****************** CONFIGURATION ****************** */
 // Get the current file path and filename
@@ -67,6 +68,7 @@ app.post("/auth/register", upload.single("picture"), register);
 
 /* ****************** ROUTES ****************** */
 app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 /* ****************** MONGOOSE SETUP ****************** */
 const PORT = process.env.PORT || 6001;
